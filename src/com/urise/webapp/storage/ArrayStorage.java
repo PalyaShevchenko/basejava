@@ -8,26 +8,23 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+    private static final int STORAGE_LIMIT = 10000;
+    private final Resume[] storage = new Resume[STORAGE_LIMIT];
     private int size;
 
     public void clear() {
-        if (size != 0) {
-            Arrays.fill(storage, 0, size - 1, null);
-            size = 0;
-        }
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
     }
 
     public void save(Resume r) {
-        if (findIndex(r.toString()) == -1) {
-            if (size != 10000) {
-                storage[size] = r;
-                size++;
-            } else {
-                System.out.println("ERROR Достигнут предел по количеству записей");
-            }
+        if (size == STORAGE_LIMIT) {
+            System.out.println("ERROR Достигнут предел по количеству записей");
+        } else if (findIndex(r.toString()) != -1) {
+            System.out.println("ERROR " + r + " Такая запить уже есть");
         } else {
-            System.out.println("ERROR " + r.toString() + " Такая запить уже есть");
+            storage[size] = r;
+            size++;
         }
     }
 
@@ -36,7 +33,7 @@ public class ArrayStorage {
         if (index != -1) {
             storage[index] = r;
         } else {
-            System.out.println("ERROR Запись " + r.toString() + " для измененения не найдена.");
+            System.out.println("ERROR Запись " + r + " для измененения не найдена.");
         }
     }
 
