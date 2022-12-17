@@ -7,7 +7,7 @@ import java.util.Arrays;
 public abstract class AbstractArrayStorage implements Storage {
     protected static final int STORAGE_LIMIT = 10000;
 
-    protected Resume[] storage = new Resume[STORAGE_LIMIT];
+    protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
     public void clear() {
@@ -15,7 +15,7 @@ public abstract class AbstractArrayStorage implements Storage {
         size = 0;
     }
 
-    public void update(Resume r) {
+    public final void update(Resume r) {
         int index = getIndex(r.getUuid());
         if (index < 0) {
             System.out.println("ERROR " + r.getUuid() + " не найдена");
@@ -24,7 +24,7 @@ public abstract class AbstractArrayStorage implements Storage {
         }
     }
 
-    public void save(Resume r) {
+    public final void save(Resume r) {
         int index = getIndex(r.getUuid());
         if ( index > -1) {
             System.out.println("ERROR " + r.getUuid() + " Такая запить уже есть");
@@ -36,7 +36,7 @@ public abstract class AbstractArrayStorage implements Storage {
         }
     }
 
-    public void delete(String uuid) {
+    public final void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
             System.out.println("ERROR " + uuid + " не найдена");
@@ -55,7 +55,7 @@ public abstract class AbstractArrayStorage implements Storage {
         return size;
     }
 
-    public Resume get(String uuid) {
+    public final Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
             System.out.println("ERROR " + uuid + " не найдена");
@@ -69,6 +69,4 @@ public abstract class AbstractArrayStorage implements Storage {
     protected abstract void insertElement(Resume r, int index);
 
     protected abstract void fillDeletedElement(int index);
-
-
 }
