@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public abstract class AbstractArrayStorageTest {
-    private Storage storage;
+    private final Storage storage;
 
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
@@ -38,22 +38,21 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void update() throws Exception{
-        Resume resume = new Resume(UUID_2);
+        final Resume resume = new Resume(UUID_2);
         storage.update(resume);
         Assert.assertEquals(resume, storage.get(UUID_2));
     }
 
     @Test(expected = NotExistStorageException.class)
     public void updateNotExist() throws Exception{
-        Resume resume = new Resume("dummy");
+        final Resume resume = new Resume("dummy");
         storage.update(resume);
         Assert.assertEquals(resume, storage.get("dummy"));
     }
 
-
     @Test
     public void save() throws Exception{
-        Resume RESUME_4 = new Resume("uuid4");
+        final Resume RESUME_4 = new Resume("uuid4");
         storage.save(RESUME_4);
         Assert.assertEquals(4, storage.size());
     }
@@ -61,7 +60,6 @@ public abstract class AbstractArrayStorageTest {
     @Test(expected = ExistStorageException.class)
     public void saveExist() throws Exception{
         storage.save(RESUME_3);
-        Assert.assertEquals(4, storage.size());
     }
 
     @Test(expected = StorageException.class)
@@ -72,7 +70,7 @@ public abstract class AbstractArrayStorageTest {
                 storage.save(new Resume());
             }
         } catch (Exception e) {
-            System.out.println("overflow раньше положеного");
+            Assert.fail("overflow раньше положеного");
         }
         storage.save(new Resume());
     }
@@ -86,13 +84,12 @@ public abstract class AbstractArrayStorageTest {
     @Test(expected = NotExistStorageException.class)
     public void deleteExist() throws Exception{
         storage.delete("dummy");
-        Assert.assertEquals(2, storage.size());
     }
 
     @Test
     public void getAll() throws Exception{
-        Resume[] resumes = storage.getAll();
-        Assert.assertEquals(3, resumes.length);
+        Resume[] resumes = {RESUME_1, RESUME_2, RESUME_3};
+        Assert.assertArrayEquals(resumes, storage.getAll());
     }
 
     @Test
