@@ -6,36 +6,51 @@ import com.urise.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage{
 
-    public abstract void clear();
+    protected abstract void doUpdate(Resume resume, Object searchKey);
 
-    public abstract void update(Resume r);
+    protected abstract void doSave(Resume resume, Object searchKey);
 
-    public abstract void save(Resume r);
+    protected abstract Resume doGet(Object searchKey);
 
-    public abstract Resume get(String uuid);
+    protected abstract void doDelete(Object searchKey);
 
-    public abstract void delete(String uuid);
+    protected abstract Object getSearchKey(String uuid);
 
-    public abstract Resume[] getAll();
+    protected abstract boolean isExist(Object searchKey);
 
-    public abstract int size();
-
-    protected abstract int getIndex(String uuid);
-
-    protected final int isNotExist(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            return index;
-        }
+    public void update(Resume r) {
+        Object searchKey = isNotExistingSearchKey(r.getUuid());
+        doUpdate(r, searchKey);
     }
 
-    protected final int isExist(String uuid) {
-        int index = getIndex(uuid);
-        if (index > -1) {
+    public void save(Resume r) {
+        Object searchKey = isExistingSearchKey(r.getUuid());
+        doSave(r, searchKey);
+    }
+
+    public Resume get(String uuid) {
+        Object searchKey = isNotExistingSearchKey(uuid);
+        return doGet(searchKey);
+    }
+
+    public void delete(String uuid) {
+        Object searchKey = isNotExistingSearchKey(uuid);
+        doDelete(searchKey);
+    }
+
+    private Object isNotExistingSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (!isExist(searchKey)) {
+            throw new NotExistStorageException(uuid);
+        }
+        return searchKey;
+    }
+
+    private Object isExistingSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (isExist(searchKey)) {
             throw new ExistStorageException(uuid);
         }
-        return index;
+        return searchKey;
     }
 }

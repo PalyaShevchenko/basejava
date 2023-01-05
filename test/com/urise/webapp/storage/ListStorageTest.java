@@ -71,10 +71,16 @@ public class ListStorageTest {
         storage.get(UUID_NOT_EXIST);
     }
 
-    @Test
+    @Test(expected = NotExistStorageException.class)
     public void delete() throws Exception {
         storage.delete(UUID_2);
         assertSize(2);
+        assertGet(RESUME_2);
+    }
+
+    @Test(expected = NotExistStorageException.class)
+    public void deleteNotExist() throws Exception {
+        storage.delete(UUID_NOT_EXIST);
     }
 
     @Test
