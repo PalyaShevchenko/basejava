@@ -10,7 +10,7 @@ public class MapStorage extends AbstractStorage{
     private final Map<String, Resume> map = new HashMap<>();
     @Override
     protected void doUpdate(Resume resume, Object searchKey) {
-        map.replace((String) searchKey, resume);
+        map.put((String) searchKey, resume);
     }
 
     @Override
