@@ -13,5 +13,4 @@ public class ListStorageTest extends AbstractStorageTest{
     protected void assertArray(Resume[] resumes) {
         assertArrayEquals(ARRAY_EXPECTED, resumes);
     }
-
 }
