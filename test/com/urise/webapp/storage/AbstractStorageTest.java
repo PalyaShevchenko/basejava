@@ -14,9 +14,9 @@ public abstract class AbstractStorageTest {
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
     private static final String UUID_NOT_EXIST = "dummy";
-    private static final Resume RESUME_1 = new Resume(UUID_1);
-    private static final Resume RESUME_2 = new Resume(UUID_2);
-    private static final Resume RESUME_3 = new Resume(UUID_3);
+    private static final Resume RESUME_1 = new Resume(UUID_1, "Name1");
+    private static final Resume RESUME_2 = new Resume(UUID_2, "Name2");
+    private static final Resume RESUME_3 = new Resume(UUID_3, "Name3");
     protected static final Resume[] ARRAY_EXPECTED = {RESUME_1, RESUME_2, RESUME_3};
 
     @Before
@@ -36,19 +36,19 @@ public abstract class AbstractStorageTest {
         storage.clear();
         assertSize(0);
         final Resume[] resumes = {};
-        assertArrayEquals(resumes, storage.getAll());
+        assertArrayEquals(resumes, storage.getAllSorted().toArray(new Resume[0]));
     }
 
     @Test
     public void update() throws Exception {
-        final Resume resume = new Resume(UUID_2);
+        final Resume resume = new Resume(UUID_2, "Name5");
         storage.update(resume);
         assertSame(resume, storage.get(UUID_2));
     }
 
     @Test(expected = NotExistStorageException.class)
     public void updateNotExist() throws Exception {
-        final Resume resume = new Resume(UUID_NOT_EXIST);
+        final Resume resume = new Resume(UUID_NOT_EXIST, "NOT_EXIST");
         storage.update(resume);
     }
 
@@ -90,10 +90,10 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void getAll() throws Exception {
-        final Resume [] r = storage.getAll();
-        assertEquals(3, r.length);
-        assertArray(r);
+    public void getAllSorted() throws Exception {
+        final Resume [] resumes = storage.getAllSorted().toArray(new Resume[0]);
+        assertEquals(3, resumes.length);
+        assertArrayEquals(ARRAY_EXPECTED, resumes);
     }
 
     @Test
@@ -108,6 +108,4 @@ public abstract class AbstractStorageTest {
     private void assertGet(Resume resume) {
         assertEquals(resume, storage.get(resume.getUuid()));
     }
-
-    protected abstract void assertArray(Resume[] resumes);
 }
