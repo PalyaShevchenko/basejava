@@ -7,10 +7,10 @@ import static java.util.Objects.requireNonNull;
 
 public class Period {
 
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private String title;
-    private String description;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
+    private final String title;
+    private final String description;
 
     public Period (LocalDate startDate, LocalDate endDate, String title, String description) {
         this.startDate = requireNonNull(startDate, "startDate must not be null");
@@ -37,10 +37,6 @@ public class Period {
 
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     @Override

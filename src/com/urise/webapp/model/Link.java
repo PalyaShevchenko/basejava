@@ -5,8 +5,8 @@ import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 
 public class Link {
-    private String name;
-    private String url;
+    private final String name;
+    private final String url;
 
     public Link(String name, String url) {
         this.name = requireNonNull(name, "name must not be null");
