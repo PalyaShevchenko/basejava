@@ -15,7 +15,7 @@ public class Period {
     public Period (LocalDate startDate, LocalDate endDate, String title, String description) {
         this.startDate = requireNonNull(startDate, "startDate must not be null");
         this.endDate = requireNonNull(endDate, "endDate must not be null");
-        this.title = requireNonNull(title, "url must not be null");
+        this.title = requireNonNull(title, "title must not be null");
         this.description = description == null ? "" : description;
     }
 

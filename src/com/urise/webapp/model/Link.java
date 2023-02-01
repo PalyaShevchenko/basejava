@@ -10,7 +10,7 @@ public class Link {
 
     public Link(String name, String url) {
         this.name = requireNonNull(name, "name must not be null");
-        this.url = requireNonNull(url, "url must not be null");
+        this.url = url;
     }
 
     public String getName() {
