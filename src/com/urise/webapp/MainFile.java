@@ -13,21 +13,30 @@ public class MainFile {
         } catch (IOException e) {
             throw new RuntimeException("Error", e);
         }
-        File dir = new File(".\\src\\com\\urise\\webapp");
+
+        File dir = new File(".\\src\\com\\urise");
         System.out.println(dir.isDirectory());
-        String [] list = dir.list();
-        if (list != null) {
-            for (String name : dir.list()) {
-                System.out.println(name);
-            }
-        }
-        try {
-            FileInputStream fis = new FileInputStream(filePath);
+        System.out.println();
+
+        scanDir(dir);
+
+        try (FileInputStream fis = new FileInputStream(filePath)){
             System.out.println(fis.read());
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } finally {
-
         }
+    }
+
+    private static void scanDir(File dir) {
+        File[] listFile = dir.listFiles();
+        if (listFile != null) {
+            for (File name : dir.listFiles()) {
+                System.out.println(name);
+                if(name.isDirectory()) {
+                    scanDir(name);
+                }
+            }
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 package com.urise.webapp.storage;
 
+
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
@@ -7,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static com.urise.webapp.storage.ResumeTestData.createTestResume;
 
 public abstract class AbstractStorageTest {
     protected final Storage storage;
@@ -14,9 +16,9 @@ public abstract class AbstractStorageTest {
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
     private static final String UUID_NOT_EXIST = "dummy";
-    private static final Resume RESUME_1 = new Resume(UUID_1, "Name1");
-    private static final Resume RESUME_2 = new Resume(UUID_2, "Name2");
-    private static final Resume RESUME_3 = new Resume(UUID_3, "Name3");
+    private static final Resume RESUME_1 = createTestResume(UUID_1, "Name1");
+    private static final Resume RESUME_2 = createTestResume(UUID_2, "Name2");
+    private static final Resume RESUME_3 = createTestResume(UUID_3, "Name3");
     protected static final Resume[] ARRAY_EXPECTED = {RESUME_1, RESUME_2, RESUME_3};
 
     @Before
@@ -54,7 +56,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void save() throws Exception {
-        final Resume RESUME_4 = new Resume("uuid4");
+        final Resume RESUME_4 = createTestResume("uuid4", "Name4");
         storage.save(RESUME_4);
         assertGet(RESUME_4);
         assertSize(4);
