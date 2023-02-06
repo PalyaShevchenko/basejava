@@ -6,6 +6,7 @@ import com.urise.webapp.model.Resume;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -71,9 +72,8 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> doCopyAll() {
-        directoryIsNull();
-        File[] files = directory.listFiles();
-        List<Resume> resumes = new ArrayList<>(files.length);
+        List<File> files = getListFiles();
+        List<Resume> resumes = new ArrayList<>(files.size());
             for (File file : files) {
                 resumes.add(doGet(file));
             }
@@ -82,23 +82,24 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        directoryIsNull();
-        for (File file : directory.listFiles()) {
+        List<File> files = getListFiles();
+        for (File file : files) {
             doDelete(file);
         }
     }
 
     @Override
     public int size() {
-        directoryIsNull();
-        return  directory.listFiles().length;
+        return getListFiles().size();
     }
 
-    private void directoryIsNull() {
-        if (directory.listFiles() == null) {
+    private List<File> getListFiles() {
+        File[] files = directory.listFiles();
+        if (files == null) {
             throw new StorageException("Directory reading error " + directory.getName(),
                     directory.getName());
         }
+        return Arrays.asList(files);
     }
 
     protected abstract void doWrite(Resume resume, File file) throws IOException;
