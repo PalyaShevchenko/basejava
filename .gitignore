@@ -2,6 +2,8 @@
 out
 *.iml
 log
+lesson
 lesson1.md
+../src/com/urise/webapp/mainfile.java
 
 
