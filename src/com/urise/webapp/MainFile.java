@@ -3,6 +3,7 @@ package com.urise.webapp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class MainFile {
     public static void main(String[] args) {
@@ -18,7 +19,7 @@ public class MainFile {
         System.out.println(dir.isDirectory());
         System.out.println();
 
-        scanDir(dir);
+        scanDir(dir, 0);
 
         try (FileInputStream fis = new FileInputStream(filePath)){
             System.out.println(fis.read());
@@ -27,13 +28,18 @@ public class MainFile {
         }
     }
 
-    private static void scanDir(File dir) {
+    private static void scanDir(File dir, int numSpace) {
         File[] listFile = dir.listFiles();
         if (listFile != null) {
+            char[] str = new char[numSpace];
+            Arrays.fill(str, ' ');
+            final String strSpace = new String(str);
             for (File name : dir.listFiles()) {
-                System.out.println(name);
                 if(name.isDirectory()) {
-                    scanDir(name);
+                    System.out.println(strSpace + "Dir : " + name.getName());
+                    scanDir(name, numSpace + 1);
+                } else {
+                    System.out.println(strSpace + "File : " + name.getName());
                 }
             }
         }

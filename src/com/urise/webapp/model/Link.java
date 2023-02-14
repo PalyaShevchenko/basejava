@@ -1,10 +1,12 @@
 package com.urise.webapp.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
-public class Link {
+public class Link implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final String name;
     private final String url;
 
@@ -26,7 +28,9 @@ public class Link {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Link that = (Link) o;
-        return url.equals(that.url) && name.equals(that.name);
+        if (!name.equals(that.name)) return false;
+        return url != null ? url.equals(that.url) : that.url == null;
+
     }
 
     @Override
