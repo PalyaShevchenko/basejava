@@ -98,6 +98,5 @@ public class PathStorage extends AbstractStorage<Path> {
         } catch (IOException e) {
             throw new StorageException("Path reading error", null, e);
         }
-
     }
 }
