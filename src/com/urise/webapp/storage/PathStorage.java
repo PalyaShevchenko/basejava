@@ -2,9 +2,11 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.serialization.ObjectStreamSerializer;
+import com.urise.webapp.storage.serialization.SerializationStrategy;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,11 +17,11 @@ import java.util.stream.Stream;
 
 
 public class PathStorage extends AbstractStorage<Path> {
-    private final ObjectStreamSerializer objectStreamserializer;
+    private final SerializationStrategy serializationStrategy;
     private final Path directory;
 
-    protected PathStorage(String dir, ObjectStreamSerializer objectStreamSerializer) {
-        this.objectStreamserializer = objectStreamSerializer;
+    protected PathStorage(String dir, SerializationStrategy objectStreamSerializer) {
+        this.serializationStrategy = objectStreamSerializer;
         Objects.requireNonNull(dir, "directory must not be null");
         directory = Paths.get(dir);
         if(!Files.isDirectory(directory) || !Files.isWritable(directory)) {
@@ -29,7 +31,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected void doUpdate(Resume resume, Path path) {
         try {
-            objectStreamserializer.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
+            serializationStrategy.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path writing error ", resume.getUuid(), e);
         }
@@ -49,7 +51,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume doGet(Path path) {
         try {
-            return objectStreamserializer.doRead(new BufferedInputStream(Files.newInputStream(path)));
+            return serializationStrategy.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path reading error" + path.getFileName().toString(),
                     path.getFileName().toString(), e);
