@@ -2,6 +2,7 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.serialization.ObjectStreamSerializer;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -9,12 +10,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class ObjectStreamFileStorage extends AbstractStorage<File> {
-    SerializationObjectStreamStorage serializationObjectStreamStorage;
+public class FileStorage extends AbstractStorage<File> {
+    private final ObjectStreamSerializer objectStreamSerializer;
     private final File directory;
 
-    protected ObjectStreamFileStorage(File directory, SerializationObjectStreamStorage serializationObjectStreamStorage) {
-        this.serializationObjectStreamStorage = serializationObjectStreamStorage;
+    protected FileStorage(File directory, ObjectStreamSerializer objectStreamSerializer) {
+        this.objectStreamSerializer = objectStreamSerializer;
         Objects.requireNonNull(directory, "directory must not be null");
         if(!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
@@ -27,7 +28,7 @@ public class ObjectStreamFileStorage extends AbstractStorage<File> {
     @Override
     protected void doUpdate(Resume resume, File file) {
         try {
-            serializationObjectStreamStorage.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
+            objectStreamSerializer.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File writing error " + file.getName(), file.getName(), e);
         }
@@ -47,7 +48,7 @@ public class ObjectStreamFileStorage extends AbstractStorage<File> {
     @Override
     protected Resume doGet(File file) {
         try {
-            return serializationObjectStreamStorage.doRead(new BufferedInputStream(new FileInputStream(file)));
+            return objectStreamSerializer.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File reading error" + file.getName(), file.getName(), e);
         }

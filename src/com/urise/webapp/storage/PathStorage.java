@@ -2,6 +2,7 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.serialization.ObjectStreamSerializer;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -10,14 +11,15 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
-public class ObjectStreamPathStorage extends AbstractStorage<Path> {
-    SerializationObjectStreamStorage serializationObjectStreamStorage;
+public class PathStorage extends AbstractStorage<Path> {
+    private final ObjectStreamSerializer objectStreamserializer;
     private final Path directory;
 
-    protected ObjectStreamPathStorage(String dir, SerializationObjectStreamStorage serializationObjectStreamStorage) {
-        this.serializationObjectStreamStorage = serializationObjectStreamStorage;
+    protected PathStorage(String dir, ObjectStreamSerializer objectStreamSerializer) {
+        this.objectStreamserializer = objectStreamSerializer;
         Objects.requireNonNull(dir, "directory must not be null");
         directory = Paths.get(dir);
         if(!Files.isDirectory(directory) || !Files.isWritable(directory)) {
@@ -27,7 +29,7 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     @Override
     protected void doUpdate(Resume resume, Path path) {
         try {
-            serializationObjectStreamStorage.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
+            objectStreamserializer.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path writing error ", resume.getUuid(), e);
         }
@@ -47,7 +49,7 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume doGet(Path path) {
         try {
-            return serializationObjectStreamStorage.doRead(new BufferedInputStream(Files.newInputStream(path)));
+            return objectStreamserializer.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path reading error" + path.getFileName().toString(),
                     path.getFileName().toString(), e);
@@ -75,28 +77,25 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> doCopyAll() {
-        try {
-            return Files.list(directory).map(this::doGet).collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new StorageException("Directory reading error", null, e);
-        }
+        return getSteamPaths().map(this::doGet).collect(Collectors.toList());
     }
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::doDelete);
-        } catch (IOException e) {
-            throw new StorageException("Path delete error", null, e);
-        }
+        getSteamPaths().forEach(this::doDelete);
     }
 
     @Override
     public int size() {
+        return (int) getSteamPaths().count();
+    }
+
+    private Stream<Path> getSteamPaths() {
         try {
-            return (int) Files.list(directory).count();
+            return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException("Directory reading error", null, e);
+            throw new StorageException("Path reading error", null, e);
         }
+
     }
 }
