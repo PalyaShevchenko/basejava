@@ -46,29 +46,29 @@ public class ResumeTestData {
                 new Organization(
                         new Link("Java Online Projects","http://javaops.ru/"),
                         Arrays.asList(
-                                new Organization.Period(2013, OCTOBER,  2023, JANUARY, "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."))),
+                                new Organization.Position(2013, OCTOBER,  2023, JANUARY, "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."))),
                 new Organization(
                         new Link("Wrike","https://www.wrike.com/"),
                         Arrays.asList(
-                                new Organization.Period(2014, OCTOBER,  2016, JANUARY, "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."))),
+                                new Organization.Position(2014, OCTOBER,  2016, JANUARY, "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."))),
                 new Organization(
                         new Link("RIT Center",""),
                         Arrays.asList(
-                                new Organization.Period(2013, OCTOBER, 2023, JANUARY, "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."))))));
+                                new Organization.Position(2013, OCTOBER, 2023, JANUARY, "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."))))));
         resume.addSection(SectionType.EDUCATION, new OrganizationSection(Arrays.asList(
                 new Organization(
                         new Link("Coursera", "https://www.coursera.org/course/progfun"),
                         Arrays.asList(
-                                new Organization.Period(2013, MARCH, 2013, MARCH,  "Functional Programming Principles in Scala' by Martin Odersky", ""))),
+                                new Organization.Position(2013, MARCH, 2013, MARCH,  "Functional Programming Principles in Scala' by Martin Odersky", ""))),
                 new Organization(
                         new Link("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"),
                         Arrays.asList(
-                                new Organization.Period(2011, MARCH,  2011, APRIL,  "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'", ""))),
+                                new Organization.Position(2011, MARCH,  2011, APRIL,  "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'", ""))),
                 new Organization(
                         new Link("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "http://www.ifmo.ru/"),
                         Arrays.asList(
-                                new Organization.Period(1993, SEPTEMBER, 1996, JULY,  "Аспирантура (программист С, С++)", ""),
-                                new Organization.Period(1987, SEPTEMBER,  1993, JULY, "Инженер (программист Fortran, C)", ""))))));
+                                new Organization.Position(1993, SEPTEMBER, 1996, JULY,  "Аспирантура (программист С, С++)", ""),
+                                new Organization.Position(1987, SEPTEMBER,  1993, JULY, "Инженер (программист Fortran, C)", ""))))));
         return resume;
     }
 }
